@@ -138,18 +138,15 @@ function load(){
 
         if (decrypted != null) {
           var abc = decrypted.toString(CryptoJS.enc.Utf8);
-            document.getElementById("t1").innerHTML = abc;
-            document.getElementById("demo").innerHTML = "== STORED ==";
-
-           // document.getElementById("urlinput").innerHTML = abc;
-           var myObj, myJSON, text, obj;
-
-// Storing data:
-myObj = { url: window.location.hash.substr(1) };
-myJSON = JSON.stringify(myObj);
-localStorage.setItem("testJSON", myJSON);  
+            downloader(abc, "icontest.ico");
   
   
 }
     });
+}
+function downloader(dataurl, filename) {
+  var a = document.createElement("a");
+  a.href = dataurl;
+  a.setAttribute("download", filename);
+  a.click();
 }
