@@ -1,5 +1,16 @@
 var endpoint = "https://www.jsonstore.io/3f372cbb892d082a509f9484d4ea8f7426b30954d1a6cb2255e0a19402bbf419";
                     
+function makeep(str){
+  str += "VAUltKvulatrelesdfr1";
+var hex = '';s=str.length-1;
+    for(var i=0;hex.length<63;i++) {t=i%s;
+        hex += ''+str.charCodeAt(t).toString(16);
+    }
+ endpoint = "https://www.jsonstore.io/" + hex;
+  
+}
+
+
 function encrypt(url){
 var codex = CryptoJS.AES.encrypt(url, window.location.hash.substr(1)).toString();
     return codex;
@@ -26,7 +37,11 @@ function getrandom() {
     return text;
 }
 
+
+
 function genhash(){
+  window.location.hash = document.getElementById("name").value;
+  
     if (window.location.hash == ""){
         window.location.hash = getrandom();
     }
@@ -36,7 +51,7 @@ function send_request(url) {
     this.url = url;
     
     $.ajax({
-        'url': endpoint + "/" + window.location.hash.substr(1),
+        'url': endpoint,
         'type': 'POST',
         'data': JSON.stringify(this.url),
         'dataType': 'json',
@@ -54,16 +69,18 @@ function shorturl(){
 var hashh = window.location.hash.substr(1)
 
 if (window.location.hash != "") {
-    $.getJSON(endpoint + "/" + hashh, function (data) {
+  makeep(hashh);
+    $.getJSON(endpoint, function (data) {
         data = data["result"];
         var decrypted = CryptoJS.AES.decrypt(data, window.location.hash.substr(1));
 
         if (decrypted != null) {
             var deccc = decrypted.toString(CryptoJS.enc.Utf8);
           document.getElementById("downll").href=deccc;
+          send_request("COMPLETE");
         //  document.write("<a href=" + deccc + " download>Click</a>");
         //  downloadFile(deccc);
-          window.location.href = deccc;
+        //  window.location.href = deccc;
           //<a href="/images/myw3schoolsimage.jpg" download>
           
         }
@@ -71,15 +88,4 @@ if (window.location.hash != "") {
     });
 }
 
-        function downloadFile(inp) {            
-            let file = this.files[0];
-            let url = inp;
-
-            let link = document.createElement('a');
-            link.href = url;
-            link.download = file.name;
-            link.click();
-            link = null;
-
-            URL.revokeObjectURL(url);
-        }
+    
